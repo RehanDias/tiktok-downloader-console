@@ -53,8 +53,8 @@ For each TikTok video URL provided in the `urls` array, the script will:
 
 Remember to replace placeholders and configure the script according to your needs before using it. Happy TikTok video downloading and information extracting! 🎉
 
-<h3 align="left">Connect with me:</h3>
-<div align="left">
+
+<div align="center">
   <a href="https://www.instagram.com/rehandiazz/" target="_blank">
     <img src="https://img.shields.io/static/v1?message=Instagram&logo=instagram&label=&color=E4405F&logoColor=white&labelColor=&style=for-the-badge" height="35" alt="instagram logo"  />
   </a>
