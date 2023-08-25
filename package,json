@@ -1,0 +1,23 @@
+{
+  "name": "tiktok-downloader",
+  "version": "1.0.0",
+  "description": "tiktok video downloader without watermark and also there is information related to the tiktok video",
+  "main": "tiktok-downloader.js",
+  "scripts": {
+    "start": "node tiktok-downloader.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RehanDias/tiktok-downloader-console.git"
+  },
+  "keywords": [
+    "tiktok-downloader"
+  ],
+  "author": "rehandiazz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RehanDias/tiktok-downloader-console/issues"
+  },
+  "homepage": "https://github.com/RehanDias/tiktok-downloader-console#readme"
+}
