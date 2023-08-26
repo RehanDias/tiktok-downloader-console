@@ -297,22 +297,22 @@ async function download(url) {
 				months[createdDate.getMonth()]
 			} ${createdDate.getDate()} ${createdDate.getFullYear()} ${createdDate.getHours()}:${createdDate.getMinutes()} WIB`;
 
-			// Print extracted information
-			console.log("====================================");
-			console.log(`🎵 TikTok by     : ${author}`);
-			console.log(`📝 Title         : ${desc}`);
-			console.log("\n📊 Statistics:");
-			console.log(`   - ❤️ Like      : ${diggCount}`);
-			console.log(`   - 🔄 Share     : ${shareCount}`);
-			console.log(`   - 💬 Comment   : ${commentCount}`);
-			console.log(`   - ▶️ Play       : ${playCount}`);
-			console.log(`   - 📌 Bookmark  : ${collectCount}`);
-			console.log(`\n🕒 Video Duration: ${duration} Seconds`);
-			console.log(`\n📅 Created on    : ${formattedDate}`);
-			console.log("\n🎶 Music:");
-			console.log(`   🎵 ${title}`);
-			console.log("====================================");
-			console.log("✅ Download completed for video by", author);
+			// Example to Print extracted information
+			// console.log("====================================");
+			// console.log(`🎵 TikTok by     : ${author}`);
+			// console.log(`📝 Title         : ${desc}`);
+			// console.log("\n📊 Statistics:");
+			// console.log(`   - ❤️ Like      : ${diggCount}`);
+			// console.log(`   - 🔄 Share     : ${shareCount}`);
+			// console.log(`   - 💬 Comment   : ${commentCount}`);
+			// console.log(`   - ▶️ Play       : ${playCount}`);
+			// console.log(`   - 📌 Bookmark  : ${collectCount}`);
+			// console.log(`\n🕒 Video Duration: ${duration} Seconds`);
+			// console.log(`\n📅 Created on    : ${formattedDate}`);
+			// console.log("\n🎶 Music:");
+			// console.log(`   🎵 ${title}`);
+			// console.log("====================================");
+			// console.log("✅ Download completed for video by", author);
 		} catch {
 			console.log("Error while downloading", url);
 		}
