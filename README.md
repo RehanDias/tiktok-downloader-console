@@ -1,57 +1,83 @@
-## TikTok Video Downloader and Information Extractor 📽️📊
 
-This script allows you to easily download TikTok videos and extract various information from them, such as video details, user statistics, and creation date. It uses popular libraries like Axios for HTTP requests, Cheerio for HTML parsing, and Tough-Cookie for cookie management. The script takes a list of TikTok video URLs, fetches video data, downloads the video files, and extracts relevant details.
+# TikTok Video and Image Downloader 🚀
 
-### Prerequisites 🛠️
+## Overview
 
-Before using this script, make sure you have the following:
+TikTok Video and Image Downloader is a Node.js script designed to effortlessly download TikTok videos and images. With this script, you can quickly fetch content from TikTok URLs and save them to your local machine.
 
-- Node.js installed on your system.
-- TikTok video URLs that you want to process.
-- Replace the placeholders in the code with actual values (e.g., `replace with desired URL`, `replace with desired storage path`, etc.).
+## Features
 
-### Installation ⚙️
+- ✨ Download TikTok videos and images
+- 📦 Easy installation and setup
+- 🔄 Retry mechanism for robust HTML parsing
+- 📅 Automatic file naming with upload date
+- 🎉 Support for both video and image URLs
 
-1. Clone or download the repository containing the script.
-2. Open a terminal and navigate to the script's directory.
-3. Install the required Node.js packages by running:
+## Installation
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+1. **Clone the repository:**
 
    ```bash
-   npm install axios axios-cookiejar-support tough-cookie cheerio
+   git clone https://github.com/your-username/tiktok-video-downloader.git
    ```
 
-### Usage 🚀
+2. **Navigate to the project directory:**
 
-1. Open the script file (`tiktok-downloader.js`) in a text editor.
-2. Replace the placeholders with actual values, such as TikTok video URLs and desired storage paths.
-3. Customize the script further if needed.
-4. Save the file.
+   ```bash
+   cd tiktok-video-downloader
+   ```
 
-### Running the Script ▶️
+3. **Install dependencies:**
 
-1. Open a terminal and navigate to the directory containing the script file.
-2. Run the script using the following command:
+   ```bash
+   npm install
+   ```
+
+4. **Run the script:**
 
    ```bash
    node tiktok-downloader.js
    ```
 
-3. The script will process the provided TikTok URLs one by one, downloading the videos and extracting information.
+## Usage
 
-### Output 📄
+1. Modify the `urls` array in the script to include the TikTok video or image URLs you want to download.
 
-For each TikTok video URL provided in the `urls` array, the script will:
+   ```javascript
+   const urls = [
+    "https://www.tiktok.com/@user1/video/1234567890123456789",
+    "https://www.tiktok.com/@user2/video/2345678901234567890",
+    "https://www.tiktok.com/@user3/photo/3456789012345678901",
+    "https://www.tiktok.com/@user4/photo/4567890123456789012",
+    // Add more TikTok URLs as needed
+     ];
+   ```
 
-- Fetch the video data.
-- Download the video file.
-- Extract and print various information about the video, including author, title, statistics, music details, creation date, and more.
+2. Execute the script to download the specified content.
+
+## File Naming
+
+- Videos: `{authorUniqueId}_video_{formattedDate}_{videoId}.mp4`
+- Images: `{authorUniqueId}_image_{formattedDate}_{imageIndex}.jpg`
+
+## Examples
+
+```bash
+# Download videos and images from predefined TikTok URLs
+node tiktok-downloader.js
+```
 
 ### Important Notes ⚠️
 
 - This script was created for educational purposes and should be used responsibly and in compliance with TikTok's terms of service.
 - TikTok's website structure or APIs may change over time, which could potentially break this script. Regular updates may be required to ensure its functionality.
 
-Remember to replace placeholders and configure the script according to your needs before using it. Happy TikTok video downloading and information extracting! 🎉
+**Note:** Before using the script, make sure to replace the placeholder values in the `urls` array in the code according to your desired TikTok video or image URLs. Configure any other settings as needed. Happy TikTok video and image downloading! 🎉
 
 
 <div align="center">
