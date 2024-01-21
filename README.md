@@ -23,13 +23,13 @@ TikTok Video and Image Downloader is a Node.js script designed to effortlessly d
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/tiktok-video-downloader.git
+   https://github.com/RehanDias/tiktok-downloader-console.git
    ```
 
 2. **Navigate to the project directory:**
 
    ```bash
-   cd tiktok-video-downloader
+   cd tiktok-downloader-console
    ```
 
 3. **Install dependencies:**
