@@ -468,9 +468,7 @@ const resolvePhotoUrl = async (url) => {
  */
 (async () => {
     // Array of TikTok video URLs
-    const urls = [
-        "https://www.tiktok.com/@_zeeasadel/video/7478929925630594359",
-    ];
+    const urls = ["https://www.tiktok.com/@username/video/1234567890123456789"];
     // Additional query parameters for TikTok URL
     const queryParams =
         "?is_from_webapp=1&sender_device=pc&web_id=7221493350775866882";
