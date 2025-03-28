@@ -13,13 +13,8 @@
 // Importing required modules
 const fs = require("fs");
 const axios = require("axios").default;
-const {
-    wrapper
-} = require("axios-cookiejar-support");
-const {
-    CookieJar,
-    formatDate
-} = require("tough-cookie");
+const { wrapper } = require("axios-cookiejar-support");
+const { CookieJar, formatDate } = require("tough-cookie");
 const cheerio = require("cheerio");
 
 // User-agent string used for making HTTP requests
@@ -57,9 +52,7 @@ const handleHtml = async (url) => {
                 "User-Agent": USER_AGENT,
             },
         });
-        const {
-            data
-        } = res;
+        const { data } = res;
         return data;
     } catch (e) {
         // Throw an error if the request fails
@@ -118,9 +111,7 @@ const downloadImages = async (
                 responseType: "arraybuffer",
             });
 
-            const {
-                data
-            } = response;
+            const { data } = response;
 
             // Format date for creating a unique filename
             const formattedDate = formatUploadDate(tanggalan);
@@ -143,29 +134,6 @@ const downloadImages = async (
     }
 };
 /**
- * Extracts the video ID from the given TikTok video URL.
- *
- * @param {string} url - The TikTok video URL.
- * @returns {string|null} - The extracted video ID or null if not found.
- */
-const getIdVideo = async (url) => {
-    // Use a regular expression to extract the video ID from the URL
-    const match = url.match(/\/video\/(\d+)/);
-    return match ? match[1] : null;
-};
-/**
- * Extracts the numeric photo ID from a TikTok photo URL.
- * @param {string} url - The TikTok photo URL.
- * @returns {string|null} - The extracted photo ID if found, or null if not found.
- */
-const getIDPhoto = (url) => {
-    // Use a regular expression to match and extract the numeric photo ID from the URL
-    const match = url.match(/\/photo\/(\d+)/);
-    // Return the extracted photo ID or null if not found
-    return match ? match[1] : null;
-};
-
-/**
  * Formats a timestamp into a string representing the upload date.
  *
  * @param {number} timestamp - The timestamp to format.
@@ -173,11 +141,12 @@ const getIDPhoto = (url) => {
  */
 const formatUploadDate = (timestamp) => {
     const createdDate = new Date(timestamp * 1000);
-    const formattedDate = `${createdDate.getDate().toString().padStart(2, "0")}${(
-    createdDate.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}${createdDate.getFullYear()}`;
+    const formattedDate = `${createdDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}${(createdDate.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}${createdDate.getFullYear()}`;
     return formattedDate;
 };
 
@@ -188,9 +157,9 @@ const formatUploadDate = (timestamp) => {
  * @returns {string} - The generated filename.
  */
 const generateVideoFileName = (videoData) => {
-    const authorUniqueId = videoData.aweme_list[0].author.unique_id;
-    const uploadDate = formatUploadDate(videoData.aweme_list[0].create_time);
-    const videoId = videoData.aweme_list[0].aweme_id;
+    const authorUniqueId = videoData.authorUniqueId;
+    const uploadDate = formatUploadDate(videoData.createTime);
+    const videoId = videoData.videoId;
 
     return `${authorUniqueId}_video_${uploadDate}_${videoId}.mp4`;
 };
@@ -229,7 +198,7 @@ const download = async (url) => {
             // Check if the target folder exists, create it if not
             if (!fs.existsSync(targetFolder)) {
                 fs.mkdirSync(targetFolder, {
-                    recursive: true
+                    recursive: true,
                 });
             }
 
@@ -280,7 +249,9 @@ const getInfo = async (url) => {
 
         // Throw an error if HTML content retrieval fails
         if (!html) {
-            throw new Error("Failed to retrieve HTML content from the provided URL");
+            throw new Error(
+                "Failed to retrieve HTML content from the provided URL"
+            );
         }
 
         let loadedHtml;
@@ -310,7 +281,9 @@ const getInfo = async (url) => {
         }
 
         // Find the script tag containing JSON data
-        const jsonDataElement = loadedHtml("#__UNIVERSAL_DATA_FOR_REHYDRATION__");
+        const jsonDataElement = loadedHtml(
+            "#__UNIVERSAL_DATA_FOR_REHYDRATION__"
+        );
 
         // Throw an error if JSON data is not found
         if (!jsonDataElement || jsonDataElement.length === 0) {
@@ -330,7 +303,9 @@ const getInfo = async (url) => {
 
         // Throw an error if parsing video information fails
         if (!data) {
-            throw new Error("Failed to extract video information from JSON data");
+            throw new Error(
+                "Failed to extract video information from JSON data"
+            );
         }
 
         return data;
@@ -350,50 +325,25 @@ const getInfo = async (url) => {
  */
 const resolveVideoUrl = async (url) => {
     try {
-        // Get the video ID from the TikTok video URL
-        const idVideo = await getIdVideo(url);
+        const API_URL = `https://api-tiktok-downloader.vercel.app/api/v4/download?url=${url}`;
 
-        // Throw an error if video ID is not found
-        if (!idVideo) {
-            throw new Error("Couldn't resolve stream. Video ID not found.");
-        }
+        const response = await instance(API_URL, {
+            method: "GET",
+            headers: headers,
+        });
 
-        // Construct the API URL for fetching video data
-        const API_URL = `https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${idVideo}`;
-
-        try {
-            // Make an API request to fetch video data
-            const apiResponse = await instance(API_URL, {
-                method: "GET",
-                headers: headers,
-            });
-
-            // Get the video data from the API response
-            const videoData = apiResponse.data;
-
-            // Check if the video data contains the necessary information
-            if (
-                videoData?.aweme_list?.[0]?.video &&
-                videoData.aweme_list[0].video.play_addr &&
-                videoData.aweme_list[0].video.play_addr.url_list &&
-                videoData.aweme_list[0].video.play_addr.url_list[0]
-            ) {
-                // Return the resolved video URL and additional information
-                return {
-                    resolvedVideoUrl: videoData.aweme_list[0].video.play_addr.url_list[0],
-                    authorUniqueId: videoData.aweme_list[0].author.unique_id,
-                    videoId: videoData.aweme_list[0].aweme_id,
-                };
-            } else {
-                throw new Error("Couldn't resolve stream. No video URL found.");
-            }
-        } catch (error) {
-            // Handle errors during API request
-            console.error("Error in API request:", error.message);
-            throw error;
+        const data = response.data;
+        if (data.status === "success" && data.result.type === "video") {
+            return {
+                resolvedVideoUrl: data.result.video.playAddr[0],
+                authorUniqueId: data.result.author.username,
+                videoId: data.result.id,
+                createTime: data.result.createTime,
+            };
+        } else {
+            throw new Error("Failed to get video information");
         }
     } catch (error) {
-        // Log an error message if resolveVideoUrl fails
         console.error("Error in resolveVideoUrl:", error.message);
         throw error;
     }
@@ -460,8 +410,8 @@ const parseVideoData = async (raw) => {
 
         // Extract the resolved video URL from the JSON data
         const playAddrUrlList =
-            data?.__DEFAULT_SCOPE__?.["webapp.video-detail"]?.itemInfo?.itemStruct
-            ?.video?.bitrateInfo?.[0]?.PlayAddr?.UrlList;
+            data?.__DEFAULT_SCOPE__?.["webapp.video-detail"]?.itemInfo
+                ?.itemStruct?.video?.bitrateInfo?.[0]?.PlayAddr?.UrlList;
 
         // Check if the JSON structure is valid and contains sufficient data
         if (!playAddrUrlList || playAddrUrlList.length < 2) {
@@ -479,6 +429,38 @@ const parseVideoData = async (raw) => {
     }
 };
 /**
+ * Resolves the TikTok photo URL using the provided URL.
+ *
+ * @param {string} url - The TikTok photo URL.
+ * @returns {Promise<Object>} - A Promise representing the resolved photo URL and additional information.
+ * @throws {Error} - Throws an error if resolving photo URL fails.
+ */
+const resolvePhotoUrl = async (url) => {
+    try {
+        const API_URL = `https://api-tiktok-downloader.vercel.app/api/v4/download?url=${url}`;
+        const response = await instance(API_URL, {
+            method: "GET",
+            headers: headers,
+        });
+
+        const data = response.data;
+        if (data.status === "success" && data.result.type === "image") {
+            return {
+                images: data.result.images,
+                authorUniqueId: data.result.author.username,
+                createTime: data.result.createTime,
+                id: data.result.id,
+            };
+        } else {
+            throw new Error("Failed to get photo information");
+        }
+    } catch (error) {
+        console.error("Error in resolvePhotoUrl:", error.message);
+        throw error;
+    }
+};
+
+/**
  * Asynchronous function to download images or videos from TikTok.
  * Iterates through a list of TikTok video URLs, fetches video details
  * from the TikTok API, and downloads either images or videos based on
@@ -486,12 +468,7 @@ const parseVideoData = async (raw) => {
  */
 (async () => {
     // Array of TikTok video URLs
-    const urls = [
-        "https://www.tiktok.com/@user1/video/1234567890123456789",
-        "https://www.tiktok.com/@user2/video/2345678901234567890",
-        "https://www.tiktok.com/@user3/photo/3456789012345678901",
-        "https://www.tiktok.com/@user4/photo/4567890123456789012",
-    ];
+    const urls = ["https://www.tiktok.com/@username/video/1234567890123456789"];
     // Additional query parameters for TikTok URL
     const queryParams =
         "?is_from_webapp=1&sender_device=pc&web_id=7221493350775866882";
@@ -509,62 +486,41 @@ const parseVideoData = async (raw) => {
         try {
             // Check if the URL is for a photo or video
             if (url.includes("/photo/")) {
-                // If the URL is for a photo, download the image
-                const idVideo = await getIDPhoto(url);
-                const API_URL = `https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${idVideo}`;
-                const request = await instance(API_URL, {
-                    method: "GET",
-                    headers: headers,
-                });
-                const body = request.data;
+                try {
+                    const photoData = await resolvePhotoUrl(url);
+                    const authorUniqueId = photoData.authorUniqueId;
+                    const tanggalan = photoData.createTime;
+                    const imageId = photoData.id;
 
-                // Check if the photo has images
-                if (
-                    body.aweme_list[0].image_post_info &&
-                    body.aweme_list[0].image_post_info.images &&
-                    body.aweme_list[0].image_post_info.images.length > 0
-                ) {
-                    const imageList = body.aweme_list[0].image_post_info.images;
-
-                    // Loop through each image
-                    for (let i = 0; i < imageList.length; i++) {
-                        const authorUniqueId = body.aweme_list[0].author.unique_id;
-                        const imageUrl = imageList[i].display_image.url_list[0];
-                        const awemeId = body.aweme_list[0].aweme_id;
-                        const tanggalan = body.aweme_list[0].create_time;
+                    // Download each image in the array
+                    for (let i = 0; i < photoData.images.length; i++) {
+                        const imageUrl = photoData.images[i];
                         const imageIndex = i + 1;
-                        const imageId = `${awemeId}_${imageIndex}`;
-                        const formattedDate = formatUploadDate(tanggalan);
-
-                        const newFileName = `${authorUniqueId}_image_${formattedDate}_${imageIndex}.jpg`;
-
-                        // Download the image
                         await downloadImages(
                             url,
-                            imageId,
+                            `${imageId}_${imageIndex}`,
                             [imageUrl],
                             tanggalan,
-                            authorUniqueId,
-                            newFileName
+                            authorUniqueId
                         );
                         console.log(
                             `✅ Image ${imageIndex} downloaded for ${authorUniqueId}`
                         );
                     }
-                } else {
-                    console.log("No images found for the provided photo URL.");
+                } catch (error) {
+                    console.error("Error while processing photo:", error);
                 }
             } else {
                 // If the URL is for a video, download the video
                 await new Promise((resolve) => setTimeout(resolve, 2000));
                 const resp = await download(modifiedUrl);
-                const {
-                    data
-                } = resp;
+                const { data } = resp;
 
                 // Video download logic
                 const $ = getDocument(await handleHtml(url));
-                const jsonDataElement = $("#__UNIVERSAL_DATA_FOR_REHYDRATION__");
+                const jsonDataElement = $(
+                    "#__UNIVERSAL_DATA_FOR_REHYDRATION__"
+                );
                 await new Promise((resolve) => setTimeout(resolve, 3000));
 
                 // Check if JSON data is present in the HTML document
@@ -577,7 +533,9 @@ const parseVideoData = async (raw) => {
                             // Parse JSON data
                             const parsedJSON = JSON.parse(rawJSON);
                             const videoDetail =
-                                parsedJSON?.__DEFAULT_SCOPE__?.["webapp.video-detail"];
+                                parsedJSON?.__DEFAULT_SCOPE__?.[
+                                    "webapp.video-detail"
+                                ];
 
                             // Check if videoDetail is present in parsed JSON
                             if (videoDetail) {
@@ -587,8 +545,11 @@ const parseVideoData = async (raw) => {
 
                                 // Check if author information is present
                                 if (author) {
-                                    const authorName = author?.uniqueId ?? "UnknownAuthor";
-                                    const formattedDate = formatUploadDate(itemStruct.createTime);
+                                    const authorName =
+                                        author?.uniqueId ?? "UnknownAuthor";
+                                    const formattedDate = formatUploadDate(
+                                        itemStruct.createTime
+                                    );
                                     const newFileName = `${authorName}_video_${formattedDate}_${itemStruct.id}.mp4`;
 
                                     // Check if video data is defined and write to file
@@ -598,26 +559,38 @@ const parseVideoData = async (raw) => {
                                         // Check if the target folder exists, create it if not
                                         if (!fs.existsSync(targetFolder)) {
                                             fs.mkdirSync(targetFolder, {
-                                                recursive: true
+                                                recursive: true,
                                             });
                                         }
 
                                         // Save the video to the filesystem in the "tiktok-videos" folder
-                                        fs.writeFileSync(`${targetFolder}/${newFileName}`, data);
+                                        fs.writeFileSync(
+                                            `${targetFolder}/${newFileName}`,
+                                            data
+                                        );
                                         console.log(
                                             `✅ Video downloaded for ${authorName}_${itemStruct.id}`
                                         );
                                     } else {
-                                        console.error("Error: Video data is undefined.");
+                                        console.error(
+                                            "Error: Video data is undefined."
+                                        );
                                     }
                                 } else {
-                                    console.error("Error: 'author' is undefined.");
+                                    console.error(
+                                        "Error: 'author' is undefined."
+                                    );
                                 }
                             } else {
-                                console.error("Error: 'videoDetail' is undefined.");
+                                console.error(
+                                    "Error: 'videoDetail' is undefined."
+                                );
                             }
                         } catch (error) {
-                            console.error("Failed to parse JSON:", error.message);
+                            console.error(
+                                "Failed to parse JSON:",
+                                error.message
+                            );
                         }
                     } else {
                         console.error("Failed to extract JSON data from HTML");
