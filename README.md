@@ -1,84 +1,117 @@
+# TikTok Content Downloader 🚀
 
-# TikTok Video and Image Downloader 🚀
+A powerful Node.js command-line tool for downloading TikTok videos and images with ease and reliability.
 
-## Overview
+## ✨ Features
 
-TikTok Video and Image Downloader is a Node.js script designed to effortlessly download TikTok videos and images. With this script, you can quickly fetch content from TikTok URLs and save them to your local machine.
+-   Download TikTok videos in high quality
+-   Support for TikTok photo posts (multiple images)
+-   Intelligent fallback system with API backup
+-   Organized file storage with meaningful naming
+-   Automatic retry mechanism
+-   Detailed console logging
+-   Cross-platform compatibility
 
-## Features
+## 🔧 Prerequisites
 
-- ✨ Download TikTok videos and images
-- 📦 Easy installation and setup
-- 🔄 Retry mechanism for robust HTML parsing
-- 📅 Automatic file naming with upload date
-- 🎉 Support for both video and image URLs
+-   Node.js (version 14 or higher)
+-   NPM (version 6 or higher)
+-   Internet connection
 
-## Installation
+## 📦 Installation
 
-### Prerequisites
+1. Clone this repository:
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+    ```bash
+    git clone https://github.com/RehanDias/tiktok-downloader-console.git
+    ```
 
-1. **Clone the repository:**
+2. Enter the project directory:
 
-   ```bash
-   https://github.com/RehanDias/tiktok-downloader-console.git
-   ```
+    ```bash
+    cd tiktok-downloader-console
+    ```
 
-2. **Navigate to the project directory:**
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
 
-   ```bash
-   cd tiktok-downloader-console
-   ```
+## 🚀 Quick Start
 
-3. **Install dependencies:**
+1. Open `config/constants.js` and verify your download paths:
 
-   ```bash
-   npm install
-   ```
+    ```javascript
+    VIDEO_DIR: "downloads/videos",
+    IMAGE_DIR: "downloads/images"
+    ```
 
-4. **Run the script:**
+2. Edit `index.js` and add your TikTok URLs:
 
-   ```bash
-   node tiktok-downloader.js
-   ```
+    ```javascript
+    const urls = [
+        "https://www.tiktok.com/@user1/video/1234567890123456789",
+        "https://www.tiktok.com/@user2/video/2345678901234567890",
+        "https://www.tiktok.com/@user3/photo/3456789012345678901",
+        "https://www.tiktok.com/@user4/photo/4567890123456789012",
+    ];
+    ```
 
-## Usage
+3. Run the downloader:
+    ```bash
+    node index.js
+    ```
 
-1. Modify the `urls` array in the script to include the TikTok video or image URLs you want to download.
+## 📝 Output Format
 
-   ```javascript
-   const urls = [
-    "https://www.tiktok.com/@user1/video/1234567890123456789",
-    "https://www.tiktok.com/@user2/video/2345678901234567890",
-    "https://www.tiktok.com/@user3/photo/3456789012345678901",
-    "https://www.tiktok.com/@user4/photo/4567890123456789012",
-    // Add more TikTok URLs as needed
-     ];
-   ```
+### Videos
 
-2. Execute the script to download the specified content.
-
-## File Naming
-
-- Videos: `{authorUniqueId}_video_{formattedDate}_{videoId}.mp4`
-- Images: `{authorUniqueId}_image_{formattedDate}_{imageIndex}.jpg`
-
-## Examples
-
-```bash
-# Download videos and images from predefined TikTok URLs
-node tiktok-downloader.js
+```
+{username}_video_{date}_{videoId}.mp4
 ```
 
-### Important Notes ⚠️
+### Images
 
-- This script was created for educational purposes and should be used responsibly and in compliance with TikTok's terms of service.
-- TikTok's website structure or APIs may change over time, which could potentially break this script. Regular updates may be required to ensure its functionality.
+```
+{username}_image_{date}_{imageId}_{index}.jpg
+```
 
-**Note:** Before using the script, make sure to replace the placeholder values in the `urls` array in the code according to your desired TikTok video or image URLs. Configure any other settings as needed. Happy TikTok video and image downloading! 🎉
+## ⚙️ Advanced Configuration
 
+You can customize the following in `config/constants.js`:
+
+-   Download directories
+-   User agents
+-   API endpoints
+-   Retry attempts
+-   Timeout values
+
+## 🔍 Troubleshooting
+
+If you encounter issues:
+
+1. Verify your internet connection
+2. Check TikTok URL validity
+3. Ensure write permissions in download directories
+4. Update Node.js to latest version
+5. Clear npm cache and reinstall dependencies
+
+## ⚠️ Important Notes
+
+-   Use responsibly and respect TikTok's terms of service
+-   Some videos may be protected and undownloadable
+-   Keep the tool updated as TikTok's structure changes frequently
+-   Consider rate limiting for bulk downloads
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## 📱 Connect With Developer
 
 <div align="center">
   <a href="https://www.instagram.com/rehandiazz/" target="_blank">
@@ -92,8 +125,12 @@ node tiktok-downloader.js
   </a>
 </div>
 
-###
+## 📄 License
 
-## License 📜
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-[MIT](https://github.com/RehanDias/tiktok-downloader-console/blob/main/LICENSE)
+---
+
+<div align="center">
+Made with ❤️ by Rehan Dias
+</div>

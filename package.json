@@ -2,9 +2,9 @@
   "name": "tiktok-downloader",
   "version": "1.0.0",
   "description": "tiktok video downloader without watermark and also there is information related to the tiktok video",
-  "main": "tiktok-downloader.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node tiktok-downloader.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
